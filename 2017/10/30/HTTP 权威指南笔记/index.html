@@ -1,0 +1,107 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="知识带来自由"><title>HTTP 权威指南笔记 | Atu's Blog</title><link rel="stylesheet" type="text/css" href="/css/style.css?v=0.0.0"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/normalize/6.0.0/normalize.min.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/pure/0.6.2/pure-min.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/pure/0.6.2/grids-responsive-min.css"><link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">HTTP 权威指南笔记</h1><a id="logo" href="/.">Atu's Blog</a><p class="description"></p></div><div id="nav-menu"><a href="/." class="current"><i class="fa fa-home"> 首页</i></a><a href="/archives/"><i class="fa fa-archive"> 归档</i></a><a href="/about/"><i class="fa fa-user"> 关于</i></a></div></div><div id="layout" class="pure-g"><div class="pure-u-1 pure-u-md-3-4"><div class="content_container"><div class="post"><h1 class="post-title">HTTP 权威指南笔记</h1><div class="post-meta">Oct 30, 2017<span> | </span><span class="category"><a href="/categories/web/">web</a></span><script src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js" async></script><span id="busuanzi_container_page_pv"> | <span id="busuanzi_value_page_pv"></span><span> 阅读</span></span></div><div class="post-content"><h3 id="第一章"><a href="#第一章" class="headerlink" title="第一章"></a>第一章</h3><p>####1.1 媒体类型 MIME</p>
+<p>MIME 类型是一种文本标记，表示一种主要的对象类型和一个特定的子类型，中间由一条斜杠来分割。</p>
+<ul>
+<li>HTML 格式的文本文档有 text/html 类型标记</li>
+<li>普通的 ASCII 文本文档由 text/plain 类型标记</li>
+<li>JPEG 版本的图片为 image/jpeg 类型</li>
+<li>GIF 格式的图片为 iamge/gif 类型</li>
+<li>Apple 的 QuickTime 电影为 video/quicktime</li>
+<li>微软的 PowerPoint 演示文件为 application/vnd.ms-powerpoint</li>
+</ul>
+<p>#####1.2 URI</p>
+<p>URI（统一资源标识符）用于定位信息资源</p>
+<h5 id="1-3-URL"><a href="#1-3-URL" class="headerlink" title="1.3 URL"></a>1.3 URL</h5><p>URL (统一资源定位符) 是资源标识符最常见的形式，描述了一台特定服务器上某资源的特定位置。URL 包含三个部分：</p>
+<ul>
+<li>第一部分称为方案（scheme），说明了访问资源所使用的协议类型。（通常为 http 协议）</li>
+<li>第二部分给出了服务器的因特网地址</li>
+<li>其余部分指定了 Web 服务器上某个资源</li>
+</ul>
+<h5 id="1-4-URN"><a href="#1-4-URN" class="headerlink" title="1.4 URN"></a>1.4 URN</h5><p>URN 统一资源名，作为特定内容的唯一名称使用，与当前资源所在地无关。</p>
+<h5 id="1-5-事务"><a href="#1-5-事务" class="headerlink" title="1.5 事务"></a>1.5 事务</h5><p>一个事务由一条（客户端）请求命令和一个（服务器）响应结果组成。这种通信是通过 HTTP 报文的格式化数据块进行的。</p>
+<ul>
+<li>HTTP 方法：包含 GET、PUT、DELETE、POST、HEAD</li>
+<li>状态码：包含 200、302、404 等</li>
+<li>Web 页面中可以包含多个对象</li>
+</ul>
+<h5 id="1-6-报文"><a href="#1-6-报文" class="headerlink" title="1.6 报文"></a>1.6 报文</h5><p>报文是由一行一行的简单字符串组成的，分为客户端请求报文和服务端的响应报文</p>
+<p><img src="http_message.png" alt=""></p>
+<p>报文分为三个部分</p>
+<ul>
+<li>起始行：报文的第一行，用来说明要做些什么，在响应报文中说明出现了什么情况</li>
+<li>首部字段：起始行后面有零个或多个的首部字段，每个首部字段都包含一个名字和一个值，用冒号（:)来分隔，以一个空行结束</li>
+<li>主体：空行之后就是可选主体，包含所有类型的数据</li>
+</ul>
+<p>#####1.7 连接</p>
+<ul>
+<li>TCP/IP：提供了无差错数据传输、按序传输、未分段的数据流</li>
+<li>连接、IP地址及端口号</li>
+</ul>
+<p>#####1.8 协议版本</p>
+<p>#####1.9 Web 的结构组件</p>
+<ul>
+<li>代理：位于 client 和 server 之间的 HTTP 中间实体</li>
+<li>缓存：HTTP 的仓库</li>
+<li>网关：连接其他应用程序的特殊 Web 服务器</li>
+<li>隧道：对HTTP 通信报文进行盲转发的特殊服务器</li>
+<li>Agent 代理：发起自动 HTTP请求得半智能 Web 客户端</li>
+</ul>
+<h3 id="第二章-URL"><a href="#第二章-URL" class="headerlink" title="第二章 URL"></a>第二章 URL</h3><p>#####2.1 编码机制</p>
+<p>编码机制用来在  URL 中表示各种不安全的字符(~ 空格 % 等)，通过一种转义表示法来表示不安全的字符，表示法包含一个百分号（%），后面跟着两个表示字符 ASCII 码的十六进制数。</p>
+<p>#####2.2 字符限制</p>
+<p><img src="t1.png" alt=""></p>
+<p>#####2.3 方案的世界</p>
+<ul>
+<li>http 超文本传输协议方案</li>
+<li>https 与 http 是一对，区别在于 https 使用了 ssl 端到端的加密机制</li>
+<li>mailto 指向的是 E-mail 地址</li>
+<li>ftp 文件传输协议，可以用来从 FTP 服务器上下载或向其上载文件，并获取 FTP 服务器上的目录结构内容的列表</li>
+<li>rtsp、rtspu 是可以通过实时流传输协议解析的音视频媒体资源的标识符，rtspu 中的 u 表示使用 UDP 协议来获取资源</li>
+<li>file 表示一台指定主机上可直接访问的文件</li>
+<li>news 用来访问一些特定的文章或新闻组，自身包含的信息不足以对资源进行定位</li>
+<li>telnet 用于访问交互式业务。表示的并不是对象自身，而是可通过 telnet 协议访问的交互式应用程序</li>
+</ul>
+<h3 id="第三章-HTTP-报文"><a href="#第三章-HTTP-报文" class="headerlink" title="第三章 HTTP 报文"></a>第三章 HTTP 报文</h3><p>HTTP 报文是在 HTTP 应用程序之间发送的数据块，这些数据块以一些文本形式的元信息开头，这些信息描述了报文的内容及含义，后面跟着可选的数据部分。术语用“流入”、“流出”、“上游”及“下游”描述报文方向。</p>
+<h5 id="3-1-报文的组成部分"><a href="#3-1-报文的组成部分" class="headerlink" title="3.1 报文的组成部分"></a>3.1 报文的组成部分</h5><p>请求报文格式：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&lt;method&gt; &lt;request-URL&gt; &lt;version&gt;  请求行</div><div class="line">&lt;headers&gt;</div><div class="line"></div><div class="line">&lt;entity-body&gt;</div></pre></td></tr></table></figure>
+<p>响应报文格式：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&lt;version&gt; &lt;status&gt; &lt;reason-phrase&gt;  响应行</div><div class="line">&lt;headers&gt;</div><div class="line"></div><div class="line">&lt;entity-body&gt;g</div></pre></td></tr></table></figure>
+<p>描述：</p>
+<ul>
+<li><p>方法 (method)</p>
+<p>  客户端希望服务器对资源的执行动作。如：GET、HEAD、POST</p>
+<p>  <img src="method.png" alt=""></p>
+</li>
+<li><p>请求 URL (request-URL)</p>
+<p>  命名了所请求资源的完整 URL</p>
+</li>
+<li><p>版本 (version)</p>
+<p>  报文中所使用的 HTTP 版本</p>
+</li>
+</ul>
+<ul>
+<li><p>状态码 (status)</p>
+<p>  这三位数字描述了请求过程中所发生的情况</p>
+<p>  <img src="status.png" alt=""></p>
+</li>
+<li><p>原因短语 (reason-phrase)</p>
+<p>  数字状态码的可读版本，包含行终止序列之前的所有文本</p>
+</li>
+<li><p>首部 (header)</p>
+<p>  可以有零个或多个首部，由一个空行结束，表示首部列表的借宿和实体主体部分的开始</p>
+</li>
+<li><p>实体的主体部分 (entity-body)</p>
+<p>  任意数据组成的数据块</p>
+</li>
+</ul>
+<h5 id="3-2-方法"><a href="#3-2-方法" class="headerlink" title="3.2 方法"></a>3.2 方法</h5><ul>
+<li>GET 通常用于请求服务器发送某个资源</li>
+<li>HEAD 与 GET 方法类似，但服务器在响应总只返回首部，不返回实体部分</li>
+<li>PUT 会向服务器写入文档</li>
+<li>POST 通常用来提交表单</li>
+<li>TRACE 允许客户端在最终请求发送给服务器时，看看它变成什么样子。追踪原始报文是否，以及如何被毁坏或修改过。主要用于诊断</li>
+<li>OPTIONS 请求 Web 服务器告知其支持的各种功能</li>
+<li><p>DELETE 请求服务器删除请求 URL 所指定的资源</p>
+<p>  GET 与 POST 的区别主要是幂等与安全性，链接知乎对于这个问题的讨论。<a href="https://www.zhihu.com/question/28586791" target="_blank" rel="external">https://www.zhihu.com/question/28586791</a></p>
+</li>
+</ul>
+</div><script type="text/javascript" src="/js/share.js?v=0.0.0" async></script><a data-url="http://yoursite.com/2017/10/30/HTTP 权威指南笔记/" data-id="cj9ea5tnx0006lunkez048bi9" class="article-share-link">分享</a><div class="tags"><a href="/tags/http/">http</a></div><div class="post-nav"><a href="/2017/10/20/YUV420详解/" class="next">YUV420 详解</a></div></div></div></div><div class="pure-u-1-4 hidden_mid_and_down"><div id="sidebar"><div class="widget"><form action="//www.google.com/search" method="get" accept-charset="utf-8" target="_blank" class="search-form"><input type="text" name="q" maxlength="20" placeholder="Search"/><input type="hidden" name="sitesearch" value="http://yoursite.com"/></form></div><div class="widget"><div class="widget-title"><i class="fa fa-folder-o"> 分类</i></div><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/android/">android</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/kotlin/">kotlin</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/web/">web</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/读书/">读书</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/随笔/">随笔</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-star-o"> 标签</i></div><div class="tagcloud"><a href="/tags/web/" style="font-size: 15px;">web</a> <a href="/tags/http/" style="font-size: 15px;">http</a> <a href="/tags/视频/" style="font-size: 15px;">视频</a> <a href="/tags/样式/" style="font-size: 15px;">样式</a> <a href="/tags/技巧/" style="font-size: 15px;">技巧</a> <a href="/tags/地图/" style="font-size: 15px;">地图</a> <a href="/tags/流程分析/" style="font-size: 15px;">流程分析</a> <a href="/tags/读书/" style="font-size: 15px;">读书</a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-file-o"> 最近文章</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2017/10/30/HTTP 权威指南笔记/">HTTP 权威指南笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/20/YUV420详解/">YUV420 详解</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/18/CSS 笔记四/">CSS3 笔记四</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/11/读《许三观卖血记》/">读《许三观卖血记》</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/11/CSS3 笔记三/">CSS3 笔记三</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/20/构造网页（笔记二）/">构造网页（笔记二）</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/17/ScrollView 点击事件传递/">ScrollView 点击事件传递</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/17/月份得分平滑曲线/">月份得分平滑曲线</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/10/读《杀死一只知更鸟》/">读《杀死一只知更鸟》</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/08/HTML5 the missing manual(一)/">HTML5 the missing manual(一)</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-external-link"> 友情链接</i></div><ul></ul><a href="http://www.example1.com/" title="site-name1" target="_blank">site-name1</a><ul></ul><a href="http://www.example2.com/" title="site-name2" target="_blank">site-name2</a><ul></ul><a href="http://www.example3.com/" title="site-name3" target="_blank">site-name3</a></div></div></div><div class="pure-u-1 pure-u-md-3-4"><div id="footer">Copyright © 2017 <a href="/." rel="nofollow">Atu's Blog.</a> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a><a rel="nofollow" target="_blank" href="https://github.com/tufu9441/maupassant-hexo"> Theme</a> by<a rel="nofollow" target="_blank" href="https://github.com/pagecho"> Cho.</a></div></div></div><a id="rocket" href="#top" class="show"></a><script type="text/javascript" src="/js/totop.js?v=0.0.0" async></script><script type="text/javascript" src="//cdn.bootcss.com/fancybox/3.0.47/jquery.fancybox.min.js" async></script><script type="text/javascript" src="/js/fancybox.js?v=0.0.0" async></script><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/fancybox/3.0.47/jquery.fancybox.min.css"><script type="text/javascript" src="/js/codeblock-resizer.js?v=0.0.0"></script><script type="text/javascript" src="/js/smartresize.js?v=0.0.0"></script></div></body></html>
