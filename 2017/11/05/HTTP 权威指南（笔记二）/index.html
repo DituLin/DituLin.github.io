@@ -1,0 +1,153 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="知识带来自由"><title>HTTP 权威指南（笔记二） | Atu's Blog</title><link rel="stylesheet" type="text/css" href="/css/style.css?v=0.0.0"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/normalize/6.0.0/normalize.min.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/pure/0.6.2/pure-min.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/pure/0.6.2/grids-responsive-min.css"><link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">HTTP 权威指南（笔记二）</h1><a id="logo" href="/.">Atu's Blog</a><p class="description"></p></div><div id="nav-menu"><a href="/." class="current"><i class="fa fa-home"> 首页</i></a><a href="/archives/"><i class="fa fa-archive"> 归档</i></a><a href="/about/"><i class="fa fa-user"> 关于</i></a></div></div><div id="layout" class="pure-g"><div class="pure-u-1 pure-u-md-3-4"><div class="content_container"><div class="post"><h1 class="post-title">HTTP 权威指南（笔记二）</h1><div class="post-meta">Nov 5, 2017<span> | </span><span class="category"><a href="/categories/web/">web</a></span><script src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js" async></script><span id="busuanzi_container_page_pv"> | <span id="busuanzi_value_page_pv"></span><span> 阅读</span></span></div><div class="post-content"><h3 id="1、连接管理"><a href="#1、连接管理" class="headerlink" title="1、连接管理"></a>1、连接管理</h3><h4 id="1-1-TCP-连接"><a href="#1-1-TCP-连接" class="headerlink" title="1.1 TCP 连接"></a>1.1 TCP 连接</h4><p>每个 TCP 段都会由 IP 分组承载，从一个 IP 地址发送到另一个 IP 地址。而每个 IP 分组中都包括：</p>
+<ul>
+<li>一个 IP 分组首部 （源和目的 IP 地址、长度和其他标记）</li>
+<li>一个 TCP 段首部 （端口号、控制标记、排序和完整性检查的数值）</li>
+<li>一个 TCP 数据块</li>
+</ul>
+<p><img src="tcp.png" alt=""></p>
+<p>####1.2 对 TCP 性能的考虑</p>
+<ul>
+<li>HTTP 事务的时延。确定 IP 地址和端口号、连接请求、HTTP 请求、HTTP 响应</li>
+<li>性能聚焦区域。建立握手、慢启动拥塞控制、数据聚集的 Nagle 算法、延迟确认算法、TIME_WAIT 时延和端口耗尽</li>
+<li>握手时延（三次握手）</li>
+<li>延迟确认</li>
+<li>慢启动。用于防止因特网突然过载和拥塞</li>
+<li>Nagle 算法与 TCP_NODELAY。Nagle 算法试图在发送一个分组之前，将大量 TCP 数据绑定在一起。TCP_NODELAY 用于取消 Nagle 算法</li>
+<li>TIME_WAIT 累积与端口耗尽。</li>
+</ul>
+<p>####1.3 HTTP 连接的处理</p>
+<ul>
+<li>首部 connection</li>
+<li>串行事务处理时延</li>
+<li>并行连接。总数会被限制，避免影响性能</li>
+<li>持久连接。便于复用、keep-alive（在首部connection）、哑代理</li>
+<li>管道化连接</li>
+<li>正常关闭。全关闭和半关闭</li>
+</ul>
+<h3 id="2、-Web-服务器"><a href="#2、-Web-服务器" class="headerlink" title="2、 Web 服务器"></a>2、 Web 服务器</h3><p>Web 执行几项任务：</p>
+<ul>
+<li>建立连接</li>
+<li>接收请求</li>
+<li>处理请求</li>
+<li>访问资源</li>
+<li>构建响应</li>
+<li>发送响应</li>
+<li>记录事务处理过程</li>
+</ul>
+<p><img src="webservice.png" alt=""></p>
+<p>####2.1 建立连接</p>
+<p>客户端请求一条到 Web 服务器的 TCP 连接时，Web 服务器会建立连接，并解析出IP地址。（对客户端主机名识别、通过 ident 确定客户端用户）</p>
+<p>####2.2 接收请求</p>
+<p>连接上有数据到达时， Web 服务器会从网络连接中读取数据，并将请求报文中的内容解析出来。</p>
+<ul>
+<li>单线程 Web 服务器</li>
+<li>多进程及多线程 Web 服务器</li>
+<li>复用 I/O 的服务器</li>
+<li>复用的多线程 Web 服务器</li>
+</ul>
+<p><img src="webIO.png" alt=""></p>
+<p>####2.3 处理请求</p>
+<p>一旦收到请求，就可以根据方法、资源、首部和可选的主体部分来对请求进行处理。</p>
+<p>####2.4 对资源的映射及访问</p>
+<p>Web 服务器会将请求报文中的 URI 映射为 Web 服务器上适当的内容或内容生成器，以识别出内容的源头。</p>
+<ul>
+<li>docroot 文档根目录 （虚拟托管 docroot、用户的主目录）</li>
+<li>目录列表</li>
+<li>动态内容资源的映射</li>
+<li>访问控制</li>
+</ul>
+<p>####2.5 构建响应</p>
+<p>识别出资源后，根据请求方法返回响应报文。如果有响应主体，响应报文包括：MIME 类型的 Content-Type 首部、长度的 Content-Length 首部、主体内容。</p>
+<ul>
+<li>MIME 类型   Web 服务器根据文件扩展名来说明 MIME 类型、魔法分类(搜索匹配)、显示分类（强制配置）、类型协商</li>
+<li>重定向（3XX） 永久删除的资源、临时删除的资源、URL 增强、负载均衡、服务器关联、规范目录名称</li>
+</ul>
+<p>####2.6 发送响应</p>
+<p>发送数据面临与接收数据一样的问题，需要注意对持久连接的处理。非持久连接，发送后及时关闭连接；对持久连接，需要正确计算 Content-Length 首部。</p>
+<p>####2.7 记录日志</p>
+<p>当事务结束时，Web 服务器会在日志文件上添加一个条目，来描述已执行的事务。</p>
+<h3 id="3、-代理"><a href="#3、-代理" class="headerlink" title="3、 代理"></a>3、 代理</h3><p>Web 代理服务器是网络的中间实体，位于客户端和服务器之间，在各端点之间来回传送 HTTP 报文。既是服务器，也是客户端。使用代理服务器，可以改善安全性，提高性能，节省费用。</p>
+<p>####3.1 私有和共享代理</p>
+<ul>
+<li>公共代理  集中式代理的费效比更高，更容易管理</li>
+<li>私有代理 不常见、扩展浏览器特性，提高性能</li>
+</ul>
+<p>####3.2 代理与网关对比</p>
+<ul>
+<li>代理是两个或多个相同协议的应用程序</li>
+<li>网关是两个或多个使用不同协议的端点，相当于“协议转换器”</li>
+</ul>
+<p>####3.3 代理的层次结构</p>
+<p>层次结构中代理服务器被赋予了父和子的关系，除了静态代理，还有动态代理。（如：负载均衡、地理位置附近的路由、协议/类型路由、基于订购的路由）</p>
+<p>####3.4 代理设置</p>
+<ul>
+<li>手工配置  PAC 文件，计算代理设置</li>
+<li>预先配置浏览器</li>
+<li>代理的自动配置</li>
+<li>WPAD 的代理</li>
+</ul>
+<p>####3.5 追踪报文</p>
+<ul>
+<li>via 首部字段列出了与报文途经的每个中间节点有关的信息</li>
+<li>via 包含：协议名、协议版本、节点名、节点注释</li>
+<li>trace 方法</li>
+</ul>
+<h3 id="4、-缓存"><a href="#4、-缓存" class="headerlink" title="4、 缓存"></a>4、 缓存</h3><p>Web 缓存是可以自动保存常见文档副本的 HTTP 设备。有下列优点：</p>
+<ul>
+<li>减少了冗余的数据传输</li>
+<li>缓解了网络瓶颈的问题</li>
+<li>降低了对原始服务器的要求</li>
+<li>降低了距离时延</li>
+</ul>
+<p>####4.1 缓存的拓扑结构</p>
+<p>缓存分为私有缓存和公有缓存。私有缓存不需要很大的动力或存储空间，一般浏览器中有内建的私有缓存；公有缓存是特殊的共享代理服务器，接受来自多个用户的访问。</p>
+<ul>
+<li>代理缓存的层次结构，在较小的缓存中未命中的请求会被导向较大的父缓存，由它来为剩下的那些提供服务。（层级结构）</li>
+<li>网状缓存、内容路由器以及对等缓存。</li>
+</ul>
+<p>####4.2 缓存的处理步骤</p>
+<ul>
+<li>接收</li>
+<li>解析</li>
+<li>查询</li>
+<li>新鲜度检测。与服务器进行验证</li>
+<li>创建响应</li>
+<li>发送</li>
+<li>日志</li>
+</ul>
+<p><img src="cache.png" alt=""></p>
+<p>####4.3 缓存的文档过期</p>
+<p>文档中会加有一个过期日期，若发现日期过期，需要再和服务器进行验证，看是否发生变化。If-Modified-Since：Date 验证；If-None-Match：实体标签再验证；强弱验证。</p>
+<p>####4.4 控制缓存的能力</p>
+<ul>
+<li>no-Store 与 no-Cache 响应首部。防止缓存提供未经证实的已缓存对象，</li>
+<li>max-age 响应首部。表示的是从服务器将文档传来之时起，可以认为此文档处于新鲜状态的秒数。</li>
+<li>Expires 响应首部。指定实际的日期而不是秒数。（由于服务器存在时钟不同步，不推荐）</li>
+<li>must-revalidate 响应首部。可以配置缓存，使其提供一些陈旧的对象，以提高性能。</li>
+<li>试探性过期。LM-Factor 算法根据最后修改日期，设置新鲜度持续时间。</li>
+<li>使用期和新鲜生存期。</li>
+<li>缓存与广告之间的矛盾。</li>
+</ul>
+<h3 id="5、-网关、隧道及中继"><a href="#5、-网关、隧道及中继" class="headerlink" title="5、 网关、隧道及中继"></a>5、 网关、隧道及中继</h3><p>####5.1 网关</p>
+<p>网关是资源和应用程序之间的粘合剂，可以进行不同协议之间的装换。可以用一个斜杠来分割客户端和服务端的协议。<client 协议="">/<server 协议=""></server></client></p>
+<p>####5.2 协议网关</p>
+<ul>
+<li>HTTP/*: 服务器端  Web 网关</li>
+<li>HTTPS/HTTP 服务器端安全网关</li>
+<li>HTTPS/HTTP 客户端安全加速器网关</li>
+<li>资源网关</li>
+</ul>
+<p>####5.3 隧道</p>
+<p>Web 隧道允许用户通过 HTTP 连接发送非 HTTP 流量，这些流量可以穿过只允许 Web 流量通过的防火墙。</p>
+<ul>
+<li><p>用 CONNECT 建立 HTTP 隧道</p>
+<p>  <img src="tunnel.png" alt=""></p>
+</li>
+<li>数据隧道、定时及连接管理</li>
+<li>SSL 隧道</li>
+</ul>
+<p>直接的 SSL 连接和隧道化 SSL 连接的对比</p>
+<p><img src="ssl.png" alt=""></p>
+<p>####5.4 中继</p>
+<p>HTTP 中继是没有完全遵循 HTTP 规范的简单 HTTP 代理，负责处理 HTTP 中建立连接的部分，然后对字节进行盲转发。</p>
+</div><script type="text/javascript" src="/js/share.js?v=0.0.0" async></script><a data-url="http://yoursite.com/2017/11/05/HTTP 权威指南（笔记二）/" data-id="cj9mius8i0009brnklplqqdyg" class="article-share-link">分享</a><div class="tags"></div><div class="post-nav"><a href="/2017/10/30/HTTP 权威指南（笔记一）/" class="next">HTTP 权威指南笔记</a></div></div></div></div><div class="pure-u-1-4 hidden_mid_and_down"><div id="sidebar"><div class="widget"><form action="//www.google.com/search" method="get" accept-charset="utf-8" target="_blank" class="search-form"><input type="text" name="q" maxlength="20" placeholder="Search"/><input type="hidden" name="sitesearch" value="http://yoursite.com"/></form></div><div class="widget"><div class="widget-title"><i class="fa fa-folder-o"> 分类</i></div><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/android/">android</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/kotlin/">kotlin</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/web/">web</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/读书/">读书</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/随笔/">随笔</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-star-o"> 标签</i></div><div class="tagcloud"><a href="/tags/http/" style="font-size: 15px;">http</a> <a href="/tags/视频/" style="font-size: 15px;">视频</a> <a href="/tags/样式/" style="font-size: 15px;">样式</a> <a href="/tags/地图/" style="font-size: 15px;">地图</a> <a href="/tags/技巧/" style="font-size: 15px;">技巧</a> <a href="/tags/流程分析/" style="font-size: 15px;">流程分析</a> <a href="/tags/读书/" style="font-size: 15px;">读书</a> <a href="/tags/web/" style="font-size: 15px;">web</a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-file-o"> 最近文章</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2017/11/05/HTTP 权威指南（笔记二）/">HTTP 权威指南（笔记二）</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/30/HTTP 权威指南（笔记一）/">HTTP 权威指南笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/20/YUV420详解/">YUV420 详解</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/18/CSS 笔记四/">CSS3 笔记四</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/11/读《许三观卖血记》/">读《许三观卖血记》</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/11/CSS3 笔记三/">CSS3 笔记三</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/20/构造网页（笔记二）/">构造网页（笔记二）</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/17/ScrollView 点击事件传递/">ScrollView 点击事件传递</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/17/月份得分平滑曲线/">月份得分平滑曲线</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/10/读《杀死一只知更鸟》/">读《杀死一只知更鸟》</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-external-link"> 友情链接</i></div><ul></ul><a href="http://www.example1.com/" title="site-name1" target="_blank">site-name1</a><ul></ul><a href="http://www.example2.com/" title="site-name2" target="_blank">site-name2</a><ul></ul><a href="http://www.example3.com/" title="site-name3" target="_blank">site-name3</a></div></div></div><div class="pure-u-1 pure-u-md-3-4"><div id="footer">Copyright © 2017 <a href="/." rel="nofollow">Atu's Blog.</a> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a><a rel="nofollow" target="_blank" href="https://github.com/tufu9441/maupassant-hexo"> Theme</a> by<a rel="nofollow" target="_blank" href="https://github.com/pagecho"> Cho.</a></div></div></div><a id="rocket" href="#top" class="show"></a><script type="text/javascript" src="/js/totop.js?v=0.0.0" async></script><script type="text/javascript" src="//cdn.bootcss.com/fancybox/3.0.47/jquery.fancybox.min.js" async></script><script type="text/javascript" src="/js/fancybox.js?v=0.0.0" async></script><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/fancybox/3.0.47/jquery.fancybox.min.css"><script type="text/javascript" src="/js/codeblock-resizer.js?v=0.0.0"></script><script type="text/javascript" src="/js/smartresize.js?v=0.0.0"></script></div></body></html>
