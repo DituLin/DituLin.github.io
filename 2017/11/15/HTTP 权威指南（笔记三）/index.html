@@ -1,0 +1,77 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="知识带来自由"><title>HTTP 权威指南（笔记三） | Atu's Blog</title><link rel="stylesheet" type="text/css" href="/css/style.css?v=0.0.0"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/normalize/6.0.0/normalize.min.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/pure/0.6.2/pure-min.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/pure/0.6.2/grids-responsive-min.css"><link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">HTTP 权威指南（笔记三）</h1><a id="logo" href="/.">Atu's Blog</a><p class="description"></p></div><div id="nav-menu"><a href="/." class="current"><i class="fa fa-home"> 首页</i></a><a href="/archives/"><i class="fa fa-archive"> 归档</i></a><a href="/about/"><i class="fa fa-user"> 关于</i></a></div></div><div id="layout" class="pure-g"><div class="pure-u-1 pure-u-md-3-4"><div class="content_container"><div class="post"><h1 class="post-title">HTTP 权威指南（笔记三）</h1><div class="post-meta">Nov 15, 2017<span> | </span><span class="category"><a href="/categories/web/">web</a></span><script src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js" async></script><span id="busuanzi_container_page_pv"> | <span id="busuanzi_value_page_pv"></span><span> 阅读</span></span></div><div class="post-content"><h3 id="1-客户端识别与-cookie-机制"><a href="#1-客户端识别与-cookie-机制" class="headerlink" title="1. 客户端识别与 cookie 机制"></a>1. 客户端识别与 cookie 机制</h3><h5 id="cookie"><a href="#cookie" class="headerlink" title="cookie"></a>cookie</h5><p><img src="http_header.png" alt=""></p>
+<p>cookie 是当前识别用户，实现持久会话的最好方式。可以分为两类：会话 cookie 和持久 cookie，它们的区别是它们过期的时间。会话 cookie 为临时 cookie，而持久 cookie 生存时间更长，存储在硬盘上，用于某个用户周期性访问的站点配置文件或登录名。</p>
+<ul>
+<li>客户端的状态。cookie 的基本思想就是让浏览器积累一组服务器特有的信息，每次访问服务器时都将这些信息提供给它。</li>
+<li>cookie 文件包含：domain、allh、path、secure、expiration、name、value</li>
+<li>cookie 与缓存。如果无法缓存文档，要将其标识出来；缓存 Set - Cookie 首部时要小心；小心处理带有 cookie 首部的请求</li>
+<li>cookie 安全性和隐私</li>
+</ul>
+<h3 id="2-基本认证与摘要认证"><a href="#2-基本认证与摘要认证" class="headerlink" title="2. 基本认证与摘要认证"></a>2. 基本认证与摘要认证</h3><p>质询/响应认证框架</p>
+<p><img src="challengeResponse.png" alt=""></p>
+<h5 id="2-1-基本认证"><a href="#2-1-基本认证" class="headerlink" title="2.1 基本认证"></a>2.1 基本认证</h5><ul>
+<li>使用Base-64 用户名/密码编码</li>
+<li>安全缺陷。Base-64 容易被反编码、容易被修改内容、假冒服务器容易骗过认证</li>
+<li>配合 SSL 使用。</li>
+</ul>
+<h5 id="2-2-摘要认证"><a href="#2-2-摘要认证" class="headerlink" title="2.2 摘要认证"></a>2.2 摘要认证</h5><p>摘要认证试图修改基本认证协议的严重缺陷。</p>
+<ul>
+<li>永远不会以明文方式在网络上发送密码</li>
+<li>可以防止恶意用户捕获并重放认证的握手过程</li>
+<li>有选择的防止报文内容被修改</li>
+<li>防范常见的攻击方式</li>
+</ul>
+<p>摘要认证的核心就是对公共信息、保密信息和有时限的随机值这个组合的单向摘要。</p>
+<h5 id="2-3-问题"><a href="#2-3-问题" class="headerlink" title="2.3 问题"></a>2.3 问题</h5><ul>
+<li>多重质询</li>
+<li>差错处理</li>
+<li>保护空间</li>
+</ul>
+<h3 id="3-安全-HTTP"><a href="#3-安全-HTTP" class="headerlink" title="3. 安全 HTTP"></a>3. 安全 HTTP</h3><ul>
+<li>https 相对于 http 多了SSL or TSL 层</li>
+<li>数字加密</li>
+<li><p>对称密钥加密技术。发送端和接收端共享相同的密钥</p>
+<p>  <img src="en.png" alt=""></p>
+</li>
+<li>公开密钥非对称加密。编码密钥是共享密钥，而解密密钥只有主机才知道。</li>
+<li>数字签名。可以证明是作者编写了这条报文；可以防止报文被篡改</li>
+<li>数字证明</li>
+</ul>
+<h3 id="4-实体与编码"><a href="#4-实体与编码" class="headerlink" title="4. 实体与编码"></a>4. 实体与编码</h3><h5 id="4-1-实体主体"><a href="#4-1-实体主体" class="headerlink" title="4.1 实体主体"></a>4.1 实体主体</h5><p>实体主体中就是原始数据。首部字段以一个空白的 CRLF （0a）行结束，随后就是实体主体的原始内容。</p>
+<p>实体编码，可以变得更安全或节省空间，Content-Length 为编码后的长度。</p>
+<h5 id="4-2-实体摘要"><a href="#4-2-实体摘要" class="headerlink" title="4.2 实体摘要"></a>4.2 实体摘要</h5><p>为检测实体主体数据是否被修改，发送方使用 Content-MD5 与主体数据生成一个校验和，接收方通过检查这个校验和来捕获所有实体是否被修改。</p>
+<h5 id="4-3-内容编码"><a href="#4-3-内容编码" class="headerlink" title="4.3 内容编码"></a>4.3 内容编码</h5><p><img src="encoding.png" alt=""></p>
+<ul>
+<li><p>Accept-Encoding 首部用于指定解码方式，避免服务器使用客户端不支持的编码方式。</p>
+</li>
+<li><p>Transfer-Encoding 告知接收方为了可靠地传输报文，已经对其进行了何种编码。</p>
+</li>
+<li><p>TE 用在请求首部中，告知服务器可以使用哪些传输编码扩展。</p>
+</li>
+<li><p>分块编码是报文属性，而不是主体的属性。</p>
+</li>
+<li>差异编码。If-None-Match 接收差异</li>
+</ul>
+<h3 id="5-Web-主机托管"><a href="#5-Web-主机托管" class="headerlink" title="5 Web 主机托管"></a>5 Web 主机托管</h3><ul>
+<li><p>通过IP地址进行虚拟主机托管。</p>
+<p>  优点：能比较好区分不同的目标网站</p>
+<p>  缺点：IP 地址资源有限</p>
+</li>
+<li><p>通过 host 首部进行虚拟主机托管。避免过度的地址消耗和虚拟IP地址的限制</p>
+<p>  语法：Host = “Host” “:” host[“:”port]</p>
+<p>  例子：<br>  <img src="host.png" alt=""></p>
+</li>
+</ul>
+<ul>
+<li>镜像的服务器集群。是一排配置相同的 Web 服务器，可以相互替换。HTTP 重定向；DNS 重定向。</li>
+</ul>
+<h3 id="6-重定向和负载均衡"><a href="#6-重定向和负载均衡" class="headerlink" title="6 重定向和负载均衡"></a>6 重定向和负载均衡</h3><p>重定向：可靠的执行 HTTP 事务、最小化时延、节约网络带宽。</p>
+<p>目标是尽快地将 HTTP 报文发送到可用的 Web 服务器上去。</p>
+<ul>
+<li>通用的重定向方法：</li>
+</ul>
+<p><img src="redirect.png" alt=""></p>
+<ul>
+<li>代理与缓存的重定向方法</li>
+</ul>
+<p><img src="proxy.png" alt=""></p>
+</div><script type="text/javascript" src="/js/share.js?v=0.0.0" async></script><a data-url="http://yoursite.com/2017/11/15/HTTP 权威指南（笔记三）/" data-id="cja0utty00007f5s60omhvhet" class="article-share-link">分享</a><div class="tags"><a href="/tags/http/">http</a></div><div class="post-nav"><a href="/2017/11/05/HTTP 权威指南（笔记二）/" class="next">HTTP 权威指南（笔记二）</a></div></div></div></div><div class="pure-u-1-4 hidden_mid_and_down"><div id="sidebar"><div class="widget"><form action="//www.google.com/search" method="get" accept-charset="utf-8" target="_blank" class="search-form"><input type="text" name="q" maxlength="20" placeholder="Search"/><input type="hidden" name="sitesearch" value="http://yoursite.com"/></form></div><div class="widget"><div class="widget-title"><i class="fa fa-folder-o"> 分类</i></div><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/android/">android</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/kotlin/">kotlin</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/web/">web</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/读书/">读书</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/随笔/">随笔</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-star-o"> 标签</i></div><div class="tagcloud"><a href="/tags/web/" style="font-size: 15px;">web</a> <a href="/tags/http/" style="font-size: 15px;">http</a> <a href="/tags/视频/" style="font-size: 15px;">视频</a> <a href="/tags/样式/" style="font-size: 15px;">样式</a> <a href="/tags/技巧/" style="font-size: 15px;">技巧</a> <a href="/tags/地图/" style="font-size: 15px;">地图</a> <a href="/tags/流程分析/" style="font-size: 15px;">流程分析</a> <a href="/tags/读书/" style="font-size: 15px;">读书</a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-file-o"> 最近文章</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2017/11/15/HTTP 权威指南（笔记三）/">HTTP 权威指南（笔记三）</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/05/HTTP 权威指南（笔记二）/">HTTP 权威指南（笔记二）</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/30/HTTP 权威指南（笔记一）/">HTTP 权威指南笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/20/YUV420详解/">YUV420 详解</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/18/CSS 笔记四/">CSS3 笔记四</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/11/读《许三观卖血记》/">读《许三观卖血记》</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/11/CSS3 笔记三/">CSS3 笔记三</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/20/构造网页（笔记二）/">构造网页（笔记二）</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/17/ScrollView 点击事件传递/">ScrollView 点击事件传递</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/17/月份得分平滑曲线/">月份得分平滑曲线</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-external-link"> 友情链接</i></div><ul></ul><a href="http://www.example1.com/" title="site-name1" target="_blank">site-name1</a><ul></ul><a href="http://www.example2.com/" title="site-name2" target="_blank">site-name2</a><ul></ul><a href="http://www.example3.com/" title="site-name3" target="_blank">site-name3</a></div></div></div><div class="pure-u-1 pure-u-md-3-4"><div id="footer">Copyright © 2017 <a href="/." rel="nofollow">Atu's Blog.</a> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a><a rel="nofollow" target="_blank" href="https://github.com/tufu9441/maupassant-hexo"> Theme</a> by<a rel="nofollow" target="_blank" href="https://github.com/pagecho"> Cho.</a></div></div></div><a id="rocket" href="#top" class="show"></a><script type="text/javascript" src="/js/totop.js?v=0.0.0" async></script><script type="text/javascript" src="//cdn.bootcss.com/fancybox/3.0.47/jquery.fancybox.min.js" async></script><script type="text/javascript" src="/js/fancybox.js?v=0.0.0" async></script><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/fancybox/3.0.47/jquery.fancybox.min.css"><script type="text/javascript" src="/js/codeblock-resizer.js?v=0.0.0"></script><script type="text/javascript" src="/js/smartresize.js?v=0.0.0"></script></div></body></html>
